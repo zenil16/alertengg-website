@@ -55,10 +55,24 @@ export const FOOTER_NAV: Record<string, { label: string; href: string }[]> =
     ]),
   );
 
+/** Drop a trailing slash so `/about/` and `/about` compare equal. */
+export const normPath = (p: string) => (p !== '/' && p.endsWith('/') ? p.slice(0, -1) : p);
+
+/** True when `href` is the page at `current`. */
+export function isCurrent(href: string, current: string): boolean {
+  return normPath(href) === normPath(current);
+}
+
 /** True when `current` is this nav href or one of its children. */
 export function isActive(item: NavItem, current: string): boolean {
-  const norm = (p: string) => (p !== '/' && p.endsWith('/') ? p.slice(0, -1) : p);
-  const here = norm(current);
-  if (item.href) return norm(item.href) === here;
-  return (item.children ?? []).some((c) => norm(c.href) === here);
+  if (item.href) return isCurrent(item.href, current);
+  return (item.children ?? []).some((c) => isCurrent(c.href, current));
+}
+
+/**
+ * The nav group a page sits under ("The Company", "Facilities"), or undefined
+ * for top-level pages. Used for the breadcrumb's middle step.
+ */
+export function sectionOf(href: string): string | undefined {
+  return NAV.find((item) => item.children?.some((c) => isCurrent(c.href, href)))?.label;
 }

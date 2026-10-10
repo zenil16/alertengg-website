@@ -1,0 +1,71 @@
+---
+/**
+ * Image + text block used across inner pages. Renders a captured Figure
+ * (image followed by its caption heading/paragraphs in the Markdown).
+ *
+ * - With a caption heading: an <article> with a real heading (level chosen by
+ *   the page so heading order never skips).
+ * - Without one: a <figure> with the caption text as <figcaption>.
+ */
+import Zoomable from './Zoomable.astro';
+import { img, plain, type Figure } from '../lib/content';
+import { inline } from '../lib/render';
+
+interface Props {
+  fig: Figure;
+  /** Descriptive alt; defaults to the captured alt. */
+  alt?: string;
+  level?: 2 | 3;
+  sizes: string;
+  widths?: number[];
+  /** Tailwind aspect class for the image box, e.g. `aspect-[4/3]`. Omit for natural ratio. */
+  aspect?: string;
+  fit?: 'cover' | 'contain';
+  eager?: boolean;
+}
+const {
+  fig,
+  alt = fig.alt,
+  level = 3,
+  sizes,
+  widths = [400, 640, 960],
+  aspect,
+  fit = 'cover',
+  eager,
+} = Astro.props;
+
+const H = `h${level}` as 'h2' | 'h3';
+const caption = fig.title ?? (fig.heading ? plain(fig.heading) : fig.text[0] ? plain(fig.text[0]) : alt);
+const Wrap = fig.heading ? 'article' : 'figure';
+const Cap = fig.heading ? 'div' : 'figcaption';
+---
+
+<Wrap class="flex h-full flex-col border border-steel-200 bg-white">
+  <Zoomable
+    src={img(fig.src)}
+    alt={alt}
+    caption={caption}
+    widths={widths}
+    sizes={sizes}
+    eager={eager}
+    linkClass={`bg-steel-100 ${aspect ?? ''}`}
+    class:list={[aspect && 'h-full w-full', !aspect && 'h-auto w-full', fit === 'contain' ? 'object-contain' : 'object-cover']}
+  />
+  {
+    (fig.heading || fig.text.length > 0) && (
+      <Cap class="flex-1 border-t-2 border-accent-500 px-5 py-5">
+        {fig.heading && <H class="card-title">{fig.heading}</H>}
+        {fig.text.map((t, i) => (
+          <p
+            class:list={[
+              'text-sm leading-relaxed text-steel-700',
+              (fig.heading || i > 0) && 'mt-2',
+              !fig.heading && i === 0 && 'font-semibold text-steel-900',
+            ]}
+            set:html={inline(t)}
+          />
+        ))}
+      </Cap>
+    )
+  }
+</Wrap>

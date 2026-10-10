@@ -1,0 +1,39 @@
+---
+/**
+ * Header band for every inner page: the page's H1 plus a breadcrumb
+ * (Home › Section › Page). "Section" is the nav group label; it has no page
+ * of its own, so it is plain text rather than a link.
+ */
+import { sectionOf } from '../lib/nav';
+
+interface Props {
+  title: string;
+  /** Last breadcrumb step, as captured (may differ in case from the H1). */
+  crumb: string;
+}
+const { title, crumb } = Astro.props;
+const section = sectionOf(Astro.url.pathname);
+---
+
+<div class="on-dark border-b-4 border-accent-500 bg-steel-900">
+  <div class="shell py-10 sm:py-14">
+    <nav aria-label="Breadcrumb">
+      <ol class="flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-steel-400">
+        <li><a href="/" class="hover:text-accent-400 hover:underline">Home</a></li>
+        {
+          section && (
+            <li class="flex items-center gap-2">
+              <span aria-hidden="true" class="text-steel-500">›</span>
+              {section}
+            </li>
+          )
+        }
+        <li class="flex items-center gap-2">
+          <span aria-hidden="true" class="text-steel-500">›</span>
+          <span aria-current="page" class="text-steel-200">{crumb}</span>
+        </li>
+      </ol>
+    </nav>
+    <h1 class="mt-3 text-4xl leading-tight text-white sm:text-5xl">{title}</h1>
+  </div>
+</div>

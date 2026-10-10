@@ -1,0 +1,80 @@
+---
+import PageLayout from '../layouts/PageLayout.astro';
+import FigureCard from '../components/FigureCard.astro';
+import BulletList from '../components/BulletList.astro';
+import Photo from '../components/Photo.astro';
+import { headings, figures, sectionAfter, blocksOf, img } from '../lib/content';
+
+const SLUG = 'Machine-Shop';
+const [, title, partnersTitle] = headings(SLUG, 2);
+const intro = sectionAfter(SLUG, title, 3).find((b) => b.kind === 'para')!.text;
+
+// Photos are the figures before the partners heading; the logos come after it.
+const partnerSrcs = new Set(
+  sectionAfter(SLUG, partnersTitle).flatMap((b) => (b.kind === 'image' ? [b.src] : [])),
+);
+const all = figures(SLUG);
+const facilities = all.filter((f) => !partnerSrcs.has(f.src));
+const partners = all.filter((f) => partnerSrcs.has(f.src));
+
+// Both capability lists, each with its own captured heading. "Conventional
+// Machining Support" is deliberately repeated — it is also a photo caption
+// above (INVENTORY §6.5, kept as captured).
+const h3s = headings(SLUG, 3);
+const lists = blocksOf(SLUG, 'list');
+const capability = h3s.slice(facilities.length).map((h, i) => ({ title: h, items: lists[i].items }));
+---
+
+<PageLayout slug={SLUG} lightbox>
+  <section class="shell section">
+    <div class="max-w-3xl">
+      <h2 class="eyebrow-rule text-3xl text-steel-900 sm:text-4xl">{title}</h2>
+      <p class="prose-copy mt-6">{intro}</p>
+    </div>
+
+    <div class="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      {
+        facilities.map((fig, i) => (
+          <FigureCard
+            fig={fig}
+            aspect="aspect-video"
+            sizes="(min-width: 1024px) 390px, (min-width: 640px) 45vw, 90vw"
+            eager={i < 3}
+          />
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="border-t border-steel-200 bg-steel-50">
+    <div class="shell section grid gap-12 lg:grid-cols-2 lg:gap-16">
+      {
+        capability.map((c) => (
+          <div>
+            <h3 class="text-2xl text-steel-900 sm:text-3xl">{c.title}</h3>
+            <BulletList items={c.items} class="mt-6" />
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="shell section">
+    <h2 class="eyebrow-rule text-3xl text-steel-900 sm:text-4xl">{partnersTitle}</h2>
+    <ul class="mt-10 grid gap-6 sm:grid-cols-2 lg:max-w-4xl">
+      {
+        partners.map((p) => (
+          <li class="flex items-center justify-center border border-steel-200 bg-white p-6">
+            <Photo
+              src={img(p.src)}
+              alt={p.alt}
+              widths={[320, 480, 640]}
+              sizes="(min-width: 640px) 400px, 85vw"
+              class="h-auto max-h-44 w-auto max-w-full object-contain"
+            />
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+</PageLayout>

@@ -151,3 +151,66 @@
     background-color: var(--color-accent-500);
   }
 }
+
+@layer components {
+  /* Vertical rhythm for inner-page sections — matches Home's section padding. */
+  .section {
+    padding-block: 4rem;
+  }
+  @media (min-width: 640px) {
+    .section {
+      padding-block: 5rem;
+    }
+  }
+
+  /* Body copy taken from /content. */
+  .prose-copy {
+    font-size: 1rem;
+    line-height: 1.75;
+    color: var(--color-steel-700);
+  }
+  .prose-copy > * + * {
+    margin-top: 1.25rem;
+  }
+  .prose-copy a {
+    color: var(--color-accent-700);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  /* Accent-square bullets, shared by every captured list. */
+  .bullet-list {
+    display: grid;
+    gap: 0.75rem;
+  }
+  .bullet-list > li {
+    position: relative;
+    padding-left: 1.5rem;
+    line-height: 1.6;
+    color: var(--color-steel-700);
+  }
+  .bullet-list > li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.6em;
+    width: 0.5rem;
+    height: 0.5rem;
+    background-color: var(--color-accent-500);
+  }
+
+  /* Card heading used by image+text blocks and info panels. */
+  .card-title {
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    color: var(--color-steel-900);
+  }
+}
+
+/* Underline marking the nav item for the current page (or its parent group). */
+@utility nav-current {
+  box-shadow: inset 0 -3px 0 var(--color-accent-500);
+}

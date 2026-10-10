@@ -1,0 +1,81 @@
+---
+import PageLayout from '../layouts/PageLayout.astro';
+import FigureCard from '../components/FigureCard.astro';
+import BulletList from '../components/BulletList.astro';
+import { headings, figures, sectionAfter, labelled, type Block } from '../lib/content';
+
+const SLUG = 'Aluminium-Foundry';
+const [, title] = headings(SLUG, 2);
+const intro = sectionAfter(SLUG, title, 3).find((b) => b.kind === 'para')!.text;
+const facilities = figures(SLUG);
+
+// The three text sections that follow the photos, in captured order.
+const [processTitle, meltTitle, gradesTitle] = headings(SLUG, 3).slice(facilities.length);
+const listOf = (bs: Block[]) => bs.find((b): b is Extract<Block, { kind: 'list' }> => b.kind === 'list')!.items;
+const parasOf = (bs: Block[]) =>
+  bs.filter((b): b is Extract<Block, { kind: 'para' }> => b.kind === 'para').map((b) => b.text);
+
+const processItems = listOf(sectionAfter(SLUG, processTitle, 3));
+const [meltText] = parasOf(sectionAfter(SLUG, meltTitle, 3));
+
+// "**BS 1490:** LM4, LM5, …" → group label + its grades, exactly as captured.
+const grades = parasOf(sectionAfter(SLUG, gradesTitle, 3)).map((p) => {
+  const [label, value] = labelled(p)!;
+  return { label, items: value.split(/,\s*/) };
+});
+---
+
+<PageLayout slug={SLUG} lightbox>
+  <section class="shell section">
+    <div class="max-w-3xl">
+      <h2 class="eyebrow-rule text-3xl text-steel-900 sm:text-4xl">{title}</h2>
+      <p class="prose-copy mt-6">{intro}</p>
+    </div>
+
+    <div class="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      {
+        facilities.map((fig, i) => (
+          <FigureCard
+            fig={fig}
+            aspect="aspect-[4/3]"
+            sizes="(min-width: 1024px) 390px, (min-width: 640px) 45vw, 90vw"
+            eager={i < 3}
+          />
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="border-t border-steel-200 bg-steel-50">
+    <div class="shell section grid gap-12 lg:grid-cols-2 lg:gap-16">
+      <div>
+        <h3 class="text-2xl text-steel-900 sm:text-3xl">{processTitle}</h3>
+        <BulletList items={processItems} class="mt-6" />
+      </div>
+      <div>
+        <h3 class="text-2xl text-steel-900 sm:text-3xl">{meltTitle}</h3>
+        <p class="prose-copy mt-6">{meltText}</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="shell section">
+    <h3 class="eyebrow-rule text-2xl text-steel-900 sm:text-3xl">{gradesTitle}</h3>
+    <dl class="mt-8 divide-y divide-steel-200 border border-steel-200">
+      {
+        grades.map((g) => (
+          <div class="grid gap-3 px-5 py-5 sm:grid-cols-[10rem_minmax(0,1fr)] sm:items-baseline sm:gap-6">
+            <dt class="font-display text-lg font-semibold uppercase tracking-wide text-accent-700">{g.label}</dt>
+            <dd>
+              <ul class="flex flex-wrap gap-2">
+                {g.items.map((item) => (
+                  <li class="border border-steel-200 bg-steel-50 px-3 py-1 text-sm font-medium text-steel-800">{item}</li>
+                ))}
+              </ul>
+            </dd>
+          </div>
+        ))
+      }
+    </dl>
+  </section>
+</PageLayout>

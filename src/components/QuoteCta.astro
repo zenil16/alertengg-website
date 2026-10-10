@@ -1,0 +1,23 @@
+---
+import { site, tel } from '../lib/content';
+import Icon from './Icon.astro';
+---
+
+{/* The Request a Quote band that closes Home and every inner page. */}
+<section class="on-dark bg-steel-900">
+  <div
+    class="shell flex flex-col items-start gap-6 py-14 sm:flex-row sm:items-center sm:justify-between"
+  >
+    <div>
+      <h2 class="text-2xl text-white sm:text-3xl">Request a Quote</h2>
+      <p class="mt-2 text-steel-400">
+        Speak to {site.contact.person} on{' '}
+        <a href={tel} class="text-accent-400 hover:underline">{site.contact.phone}</a>
+      </p>
+    </div>
+    <a href="/contact" class="btn btn-accent shrink-0">
+      Contact Us
+      <Icon name="arrow" size={18} />
+    </a>
+  </div>
+</section>

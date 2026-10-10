@@ -1,0 +1,93 @@
+---
+import PageLayout from '../layouts/PageLayout.astro';
+import Icon from '../components/Icon.astro';
+import { site, tel, emails, mapsLink, headings } from '../lib/content';
+
+const SLUG = 'contact';
+// "Location:", "Email:", "Phone:" — the captured labels, in captured order.
+const [locationLabel, emailLabel, phoneLabel] = headings(SLUG, 4);
+
+const form = site.contact_form;
+const map = site.google_maps_embed;
+const iframeId = `JotFormIFrame-${form.form_id}`;
+
+// Unique description from this page's own words: its three labelled rows.
+const description = `${locationLabel} ${site.contact.address.full_contact_page} ${emailLabel} ${emails.join(', ')}. ${phoneLabel} ${site.contact.phone}`;
+---
+
+<PageLayout slug={SLUG} description={description} cta={false}>
+  <section class="shell section grid gap-12 lg:grid-cols-[minmax(0,2fr)_minmax(0,3fr)] lg:gap-16">
+    <div>
+      <ul class="divide-y divide-steel-200 border border-steel-200 border-t-4 border-t-accent-500 bg-white">
+        <li class="flex gap-4 p-5">
+          <Icon name="person" size={22} class="mt-0.5 shrink-0 text-accent-700" />
+          <p class="font-display text-xl font-semibold text-steel-900">
+            <span class="sr-only">Contact person: </span>{site.contact.person}
+          </p>
+        </li>
+        <li class="flex gap-4 p-5">
+          <Icon name="pin" size={22} class="mt-0.5 shrink-0 text-accent-700" />
+          <div>
+            <h2 class="card-title">{locationLabel}</h2>
+            <a href={mapsLink} target="_blank" rel="noopener noreferrer" class="mt-1 block leading-relaxed text-steel-700 hover:text-accent-700">
+              {site.contact.address.full_contact_page}
+            </a>
+          </div>
+        </li>
+        <li class="flex gap-4 p-5">
+          <Icon name="mail" size={22} class="mt-0.5 shrink-0 text-accent-700" />
+          <div class="min-w-0">
+            <h2 class="card-title">{emailLabel}</h2>
+            {
+              emails.map((e) => (
+                <a href={`mailto:${e}`} class="mt-1 block break-all text-steel-700 hover:text-accent-700">
+                  {e}
+                </a>
+              ))
+            }
+          </div>
+        </li>
+        <li class="flex gap-4 p-5">
+          <Icon name="phone" size={22} class="mt-0.5 shrink-0 text-accent-700" />
+          <div>
+            <h2 class="card-title">{phoneLabel}</h2>
+            <a href={tel} class="mt-1 block text-lg font-semibold text-steel-900 hover:text-accent-700">
+              {site.contact.phone}
+            </a>
+          </div>
+        </li>
+      </ul>
+
+      <iframe
+        src={site.google_maps_embed_url}
+        title={`Google Map: ${map.place_label}`}
+        loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade"
+        allowfullscreen
+        class="mt-8 block h-80 w-full border border-steel-200"
+      ></iframe>
+    </div>
+
+    <div class="min-w-0 border border-steel-200 bg-white">
+      {/*
+        The live JotForm form, embedded with JotForm's own iframe snippet so
+        submissions go to the same form (ID from site.json) exactly as before.
+        The form, its fields and its header logo are JotForm's — not rebuilt.
+      */}
+      <iframe
+        id={iframeId}
+        title="Contact form"
+        src={`https://form.jotform.com/${form.form_id}`}
+        allow="geolocation; microphone; camera; fullscreen"
+        loading="lazy"
+        scrolling="no"
+        class="block min-h-[640px] w-full border-0"
+      ></iframe>
+    </div>
+  </section>
+
+  <script is:inline src="https://cdn.jotfor.ms/s/umd/latest/for-form-embed-handler.js"></script>
+  <script is:inline define:vars={{ selector: `iframe[id='${iframeId}']` }}>
+    window.jotformEmbedHandler?.(selector, 'https://form.jotform.com/');
+  </script>
+</PageLayout>

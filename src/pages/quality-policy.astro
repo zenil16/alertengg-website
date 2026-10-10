@@ -1,0 +1,90 @@
+---
+import PageLayout from '../layouts/PageLayout.astro';
+import Icon from '../components/Icon.astro';
+import { headings, sectionAfter, blocksOf, plain, type Block } from '../lib/content';
+import { route } from '../lib/nav';
+
+const SLUG = 'quality-policy';
+const [, policyTitle, objectivesTitle] = headings(SLUG, 2);
+
+const paraText = (blocks: Block[]) =>
+  blocks.filter((b): b is Extract<Block, { kind: 'para' }> => b.kind === 'para').map((b) => b.text);
+
+const [policyIntro] = paraText(sectionAfter(SLUG, policyTitle, 3));
+const pillars = headings(SLUG, 3).map((h) => ({ title: h, text: paraText(sectionAfter(SLUG, h, 3))[0] }));
+
+const objectivesParas = paraText(sectionAfter(SLUG, objectivesTitle, 2));
+const [table] = blocksOf(SLUG, 'table');
+
+// The closing "[Explore Foundry Quality Control](Foundry-Quality-Control)" line
+// becomes a real button; every other paragraph renders as text.
+const linkLine = objectivesParas.find((p) => /^\[[^\]]+\]\([^)]+\)$/.test(p))!;
+const [, linkLabel, linkSlug] = /^\[([^\]]+)\]\(([^)]+)\)$/.exec(linkLine)!;
+const [objectivesIntro, review, learnMore] = objectivesParas.filter((p) => p !== linkLine);
+---
+
+<PageLayout slug={SLUG}>
+  <section class="shell section">
+    <div class="max-w-3xl">
+      <h2 class="eyebrow-rule text-3xl text-steel-900 sm:text-4xl">{policyTitle}</h2>
+      <p class="prose-copy mt-6">{policyIntro}</p>
+    </div>
+
+    <div class="mt-12 grid gap-6 md:grid-cols-3">
+      {
+        pillars.map((p) => (
+          <article class="border border-steel-200 border-t-4 border-t-accent-500 bg-white p-6">
+            <h3 class="card-title">{p.title}</h3>
+            <p class="mt-3 leading-relaxed text-steel-700">{p.text}</p>
+          </article>
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="border-t border-steel-200 bg-steel-50">
+    <div class="shell section">
+      <div class="max-w-3xl">
+        <h2 class="eyebrow-rule text-3xl text-steel-900 sm:text-4xl">{objectivesTitle}</h2>
+        <p class="prose-copy mt-6">{objectivesIntro}</p>
+      </div>
+
+      <div class="mt-10 overflow-x-auto border border-steel-200 bg-white">
+        <table class="w-full text-left">
+          <thead class="bg-steel-900 text-white">
+            <tr>
+              {
+                table.head.map((h, i) => (
+                  <th scope="col" class:list={['px-3 py-3 sm:px-5 font-display text-base font-semibold uppercase tracking-wide', i === 2 && 'text-right']}>
+                    {h}
+                  </th>
+                ))
+              }
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-steel-200">
+            {
+              table.rows.map(([no, objective, target]) => (
+                <tr>
+                  <td class="w-10 px-3 py-4 sm:w-16 sm:px-5 font-display text-lg font-semibold text-steel-500">{no}</td>
+                  <th scope="row" class="px-3 py-4 font-normal text-steel-800 sm:px-5">{objective}</th>
+                  <td class="px-3 py-4 text-right font-display text-xl sm:px-5 sm:text-2xl font-semibold text-accent-700">{target}</td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </div>
+
+      <p class="prose-copy mt-8 max-w-3xl">{review}</p>
+
+      <div class="mt-10 flex flex-col items-start gap-4 border-l-4 border-accent-500 bg-white p-6 sm:flex-row sm:items-center sm:justify-between">
+        <p class="text-steel-700">{learnMore}</p>
+        <a href={route(linkSlug)} class="btn btn-accent shrink-0">
+          {plain(linkLabel)}
+          <Icon name="arrow" size={18} />
+        </a>
+      </div>
+    </div>
+  </section>
+</PageLayout>

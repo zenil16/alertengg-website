@@ -1,7 +1,7 @@
 ---
 import { Picture } from 'astro:assets';
 import { img, site } from '../lib/content';
-import { NAV, isActive } from '../lib/nav';
+import { NAV, isActive, isCurrent } from '../lib/nav';
 import Icon from './Icon.astro';
 
 const logo = img(site.branding.logo);
@@ -32,14 +32,19 @@ const current = Astro.url.pathname;
               <li class="relative" data-dropdown>
                 <button
                   type="button"
-                  class="flex items-center gap-1 px-3 py-2 font-display text-[0.95rem] font-semibold uppercase tracking-wide text-steel-700 hover:text-accent-700 aria-expanded:text-accent-700"
+                  class:list={[
+                    'flex items-center gap-1 px-3 py-2 font-display text-[0.95rem] font-semibold uppercase tracking-wide hover:text-accent-700 aria-expanded:text-accent-700',
+                    isActive(item, current) ? 'nav-current text-accent-700' : 'text-steel-700',
+                  ]}
                   aria-expanded="false"
+                  aria-controls={`dd-${item.label.replace(/\W+/g, '-').toLowerCase()}`}
                   data-dropdown-toggle
                 >
                   {item.label}
                   <Icon name="chevron" size={16} class="transition-transform duration-150" />
                 </button>
                 <ul
+                  id={`dd-${item.label.replace(/\W+/g, '-').toLowerCase()}`}
                   class="absolute left-0 top-full hidden min-w-60 border border-steel-200 bg-white py-2 shadow-lg"
                   data-dropdown-menu
                 >
@@ -47,8 +52,8 @@ const current = Astro.url.pathname;
                     <li>
                       <a
                         href={child.href}
-                        class="block px-4 py-2 text-sm text-steel-700 hover:bg-steel-50 hover:text-accent-700"
-                        aria-current={current === child.href ? 'page' : undefined}
+                        class="block border-l-[3px] border-transparent px-4 py-2 text-sm text-steel-700 hover:bg-steel-50 hover:text-accent-700 aria-[current=page]:border-accent-500 aria-[current=page]:bg-accent-50 aria-[current=page]:font-semibold aria-[current=page]:text-accent-700"
+                        aria-current={isCurrent(child.href, current) ? 'page' : undefined}
                       >
                         {child.label}
                       </a>
@@ -60,7 +65,7 @@ const current = Astro.url.pathname;
               <li>
                 <a
                   href={item.href}
-                  class="block px-3 py-2 font-display text-[0.95rem] font-semibold uppercase tracking-wide text-steel-700 hover:text-accent-700"
+                  class="block px-3 py-2 font-display text-[0.95rem] font-semibold uppercase tracking-wide text-steel-700 hover:text-accent-700 aria-[current=page]:nav-current aria-[current=page]:text-accent-700"
                   aria-current={isActive(item, current) ? 'page' : undefined}
                 >
                   {item.label}
@@ -100,20 +105,32 @@ const current = Astro.url.pathname;
               <li class="py-1" data-m-group>
                 <button
                   type="button"
-                  class="flex w-full items-center justify-between gap-2 py-3 text-left font-display text-base font-semibold uppercase tracking-wide text-steel-800"
-                  aria-expanded="false"
+                  class:list={[
+                    'flex w-full items-center justify-between gap-2 py-3 text-left font-display text-base font-semibold uppercase tracking-wide',
+                    isActive(item, current) ? 'text-accent-700' : 'text-steel-800',
+                  ]}
+                  aria-expanded={isActive(item, current) ? 'true' : 'false'}
+                  aria-controls={`m-${item.label.replace(/\W+/g, '-').toLowerCase()}`}
                   data-m-toggle
                 >
                   {item.label}
-                  <Icon name="chevron" size={18} class="transition-transform duration-150" />
+                  <Icon
+                    name="chevron"
+                    size={18}
+                    class:list={['transition-transform duration-150', isActive(item, current) && 'rotate-180']}
+                  />
                 </button>
-                <ul class="hidden pb-2 pl-3" data-m-panel>
+                <ul
+                  id={`m-${item.label.replace(/\W+/g, '-').toLowerCase()}`}
+                  class:list={['pb-2 pl-3', !isActive(item, current) && 'hidden']}
+                  data-m-panel
+                >
                   {item.children.map((child) => (
                     <li>
                       <a
                         href={child.href}
-                        class="block border-l-2 border-steel-200 py-2.5 pl-4 text-steel-700 hover:border-accent-500 hover:text-accent-700"
-                        aria-current={current === child.href ? 'page' : undefined}
+                        class="block border-l-2 border-steel-200 py-2.5 pl-4 text-steel-700 hover:border-accent-500 hover:text-accent-700 aria-[current=page]:border-accent-500 aria-[current=page]:bg-accent-50 aria-[current=page]:font-semibold aria-[current=page]:text-accent-700"
+                        aria-current={isCurrent(child.href, current) ? 'page' : undefined}
                       >
                         {child.label}
                       </a>
@@ -125,7 +142,7 @@ const current = Astro.url.pathname;
               <li>
                 <a
                   href={item.href}
-                  class="block py-3 font-display text-base font-semibold uppercase tracking-wide text-steel-800 hover:text-accent-700"
+                  class="block py-3 font-display text-base font-semibold uppercase tracking-wide text-steel-800 hover:text-accent-700 aria-[current=page]:text-accent-700"
                   aria-current={isActive(item, current) ? 'page' : undefined}
                 >
                   {item.label}

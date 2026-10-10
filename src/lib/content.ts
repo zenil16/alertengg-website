@@ -35,7 +35,7 @@ export function img(path: string): ImageMetadata {
 export type Block =
   | { kind: 'heading'; level: number; text: string }
   | { kind: 'para'; text: string }
-  | { kind: 'image'; src: string; alt: string }
+  | { kind: 'image'; src: string; alt: string; title?: string }
   | { kind: 'list'; items: string[] }
   | { kind: 'table'; head: string[]; rows: string[][] };
 
@@ -73,14 +73,27 @@ function parseFrontmatter(src: string): [Record<string, string>, string] {
   return [fm, src.slice(m[0].length)];
 }
 
+const LIGHTBOX_MARK = '\u0000lightbox:';
+
 function parseBlocks(body: string): Block[] {
   const blocks: Block[] = [];
-  // Strip HTML comments — they carry capture notes, not page content.
-  const lines = body.replace(/<!--[\s\S]*?-->/g, '').split('\n');
+  // `<!-- lightbox title: … -->` notes record the original lightbox caption of
+  // the image above them; keep those. Every other HTML comment is a capture
+  // note, not page content, and is stripped.
+  const lines = body
+    .replace(/<!--\s*lightbox title:\s*([\s\S]*?)\s*-->/g, `${LIGHTBOX_MARK}$1`)
+    .replace(/<!--[\s\S]*?-->/g, '')
+    .split('\n');
 
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i].trim();
     if (!line) continue;
+
+    if (line.startsWith(LIGHTBOX_MARK)) {
+      const last = blocks[blocks.length - 1];
+      if (last?.kind === 'image') last.title = line.slice(LIGHTBOX_MARK.length).trim();
+      continue;
+    }
 
     const heading = /^(#{1,6})\s+(.*)$/.exec(line);
     if (heading) {
@@ -177,3 +190,79 @@ export const whatsappHref = site.contact.whatsapp.href_in_source;
 export const mapsLink =
   'https://www.google.com/maps/search/?api=1&query=Alert+Engineering+Works+GIDC+Vapi+Gujarat+India';
 export const emails = site.contact.emails;
+
+/* ---------------------------------------------------------- block helpers */
+
+type Of<K extends Block['kind']> = Extract<Block, { kind: K }>;
+
+/** All blocks of one kind, in page order. */
+export function blocksOf<K extends Block['kind']>(name: string, kind: K): Of<K>[] {
+  return page(name).blocks.filter((b): b is Of<K> => b.kind === kind);
+}
+
+/** The heading text at `level`, in order (e.g. level 2 → the page's `##` lines). */
+export function headings(name: string, level: number): string[] {
+  return blocksOf(name, 'heading')
+    .filter((h) => h.level === level)
+    .map((h) => h.text);
+}
+
+/** Blocks after the first heading matching `text`, up to the next heading at or above `stopLevel`. */
+export function sectionAfter(name: string, text: string, stopLevel = 6): Block[] {
+  const all = page(name).blocks;
+  const start = all.findIndex((b) => b.kind === 'heading' && b.text === text);
+  if (start === -1) throw new Error(`Heading "${text}" not found in ${name}.md`);
+  const out: Block[] = [];
+  for (const b of all.slice(start + 1)) {
+    if (b.kind === 'heading' && b.level <= stopLevel) break;
+    out.push(b);
+  }
+  return out;
+}
+
+export interface Figure {
+  src: string;
+  alt: string;
+  /** Original lightbox title, when the capture recorded one. */
+  title?: string;
+  /** The `###` caption heading that followed the image, if any. */
+  heading?: string;
+  /** Caption paragraphs that followed the image. */
+  text: string[];
+}
+
+/**
+ * Each image with the caption heading/paragraphs that follow it in the
+ * captured Markdown. A figure ends at the next image, list or table, or at a
+ * heading once it already has a caption.
+ */
+export function figures(name: string): Figure[] {
+  const out: Figure[] = [];
+  let cur: Figure | undefined;
+  for (const b of page(name).blocks) {
+    if (b.kind === 'image') {
+      cur = { src: b.src, alt: b.alt, title: b.title, text: [] };
+      out.push(cur);
+    } else if (!cur) {
+      continue;
+    } else if (b.kind === 'heading' && !cur.heading && !cur.text.length && b.level >= 3) {
+      cur.heading = b.text;
+    } else if (b.kind === 'para') {
+      cur.text.push(b.text);
+    } else {
+      cur = undefined;
+    }
+  }
+  return out;
+}
+
+/** Text of a paragraph that is entirely `**bold**`, or undefined. */
+export function boldOnly(text: string): string | undefined {
+  return /^\*\*([^*]+)\*\*$/.exec(text.trim())?.[1];
+}
+
+/** `**Label:** value` → [label, value]. */
+export function labelled(text: string): [string, string] | undefined {
+  const m = /^\*\*([^*]+?):\*\*\s*(.*)$/.exec(text.trim());
+  return m ? [m[1], m[2]] : undefined;
+}

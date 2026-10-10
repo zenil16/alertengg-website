@@ -1,0 +1,48 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Icon from '../components/Icon.astro';
+import { site } from '../lib/content';
+import { NAV } from '../lib/nav';
+
+// Every real page, flattened from the nav, so a lost visitor has somewhere to go.
+const pages = NAV.flatMap((item) => (item.children ? item.children : [{ label: item.label, href: item.href! }]));
+---
+
+<BaseLayout title={`Page not found | ${site.company_name}`} description="The page you are looking for doesn’t exist or has moved.">
+  <meta name="robots" content="noindex" slot="head" />
+  <section class="on-dark border-b-4 border-accent-500 bg-steel-900">
+    <div class="shell py-20 sm:py-28">
+      <p class="font-display text-7xl font-bold text-accent-400 sm:text-8xl">404</p>
+      <h1 class="mt-2 text-4xl text-white sm:text-5xl">Page not found</h1>
+      <p class="mt-4 max-w-xl text-steel-300">
+        The page you are looking for doesn’t exist or has moved.
+      </p>
+      <div class="mt-8 flex flex-col gap-3 sm:flex-row">
+        <a href="/" class="btn btn-accent">
+          Go to Home
+          <Icon name="arrow" size={18} />
+        </a>
+        <a href="/contact" class="btn btn-outline-light">Request a Quote</a>
+      </div>
+    </div>
+  </section>
+
+  <nav aria-label="All pages" class="shell section">
+    <h2 class="eyebrow-rule text-2xl text-steel-900 sm:text-3xl">{site.company_name}</h2>
+    <ul class="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+      {
+        pages.map((p) => (
+          <li>
+            <a
+              href={p.href}
+              class="flex items-center justify-between gap-3 border border-steel-200 px-5 py-4 font-display text-lg font-semibold uppercase tracking-wide text-steel-800 hover:border-accent-500 hover:text-accent-700"
+            >
+              {p.label}
+              <Icon name="arrow" size={18} class="shrink-0 text-steel-400" />
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </nav>
+</BaseLayout>

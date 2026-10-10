@@ -2,6 +2,7 @@
 import { Picture } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Icon from '../components/Icon.astro';
+import QuoteCta from '../components/QuoteCta.astro';
 import { page, paragraphs, plainNoLinks, img, site } from '../lib/content';
 
 const home = page('index');
@@ -190,7 +191,7 @@ const aboutPhoto = img('/source-images/about-us/alert1_1771251175535.jpg');
 
       <Picture
         src={aboutPhoto}
-        alt="Aluminium castings produced at Alert Engineering Works"
+        alt="Front of the Alert Engineering Works factory with its name board"
         formats={['avif', 'webp']}
         fallbackFormat="jpeg"
         widths={[480, 768, 996]}
@@ -203,23 +204,5 @@ const aboutPhoto = img('/source-images/about-us/alert1_1771251175535.jpg');
   </section>
 
   {/* ============================================================== CTA */}
-  <section class="on-dark bg-steel-900">
-    <div
-      class="shell flex flex-col items-start gap-6 py-14 sm:flex-row sm:items-center sm:justify-between"
-    >
-      <div>
-        <h2 class="text-2xl text-white sm:text-3xl">Request a Quote</h2>
-        <p class="mt-2 text-steel-400">
-          Speak to {site.contact.person} on
-          <a href={`tel:+91${site.contact.phone}`} class="text-accent-400 hover:underline">
-            {site.contact.phone}
-          </a>
-        </p>
-      </div>
-      <a href="/contact" class="btn btn-accent shrink-0">
-        Contact Us
-        <Icon name="arrow" size={18} />
-      </a>
-    </div>
-  </section>
+  <QuoteCta />
 </BaseLayout>

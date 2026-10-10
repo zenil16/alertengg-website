@@ -1,0 +1,97 @@
+---
+import PageLayout from '../layouts/PageLayout.astro';
+import Zoomable from '../components/Zoomable.astro';
+import { page, headings, boldOnly, img } from '../lib/content';
+
+const SLUG = 'gallery';
+const [, title] = headings(SLUG, 2);
+
+interface Tile {
+  src: string;
+  caption?: string;
+}
+interface Group {
+  heading?: string;
+  tiles: Tile[];
+}
+
+/**
+ * Walk the captured page in order. Images become tiles; the in-flow heading
+ * ("500 kg casting successfully product", an <h1> in the middle of the old
+ * grid) starts a new group; a bold-only line is the caption of the tile
+ * before it. 4.jpeg is referenced twice on the live page — it renders once.
+ */
+const blocks = page(SLUG).blocks;
+const start = blocks.findIndex((b) => b.kind === 'heading' && b.text === title);
+let intro = '';
+const groups: Group[] = [{ tiles: [] }];
+const seen = new Set<string>();
+for (const b of blocks.slice(start + 1)) {
+  const group = groups[groups.length - 1];
+  if (b.kind === 'image') {
+    if (seen.has(b.src)) continue;
+    seen.add(b.src);
+    group.tiles.push({ src: b.src });
+  } else if (b.kind === 'heading') {
+    groups.push({ heading: b.text, tiles: [] });
+  } else if (b.kind === 'para') {
+    const cap = boldOnly(b.text);
+    if (cap && group.tiles.length) group.tiles[group.tiles.length - 1].caption = cap;
+    else if (!intro) intro = b.text;
+  }
+}
+
+const total = seen.size;
+let n = 0;
+const numbered = groups.map((g) => ({
+  ...g,
+  tiles: g.tiles.map((t) => ({ ...t, n: ++n })),
+}));
+// The first row (four columns at desktop) loads eagerly; everything else is lazy.
+const FIRST_ROW = 4;
+---
+
+<PageLayout slug={SLUG} description={intro} lightbox>
+  <section class="shell section">
+    <div class="max-w-3xl">
+      <h2 class="eyebrow-rule text-3xl text-steel-900 sm:text-4xl">{title}</h2>
+      <p class="prose-copy mt-6">{intro}</p>
+    </div>
+
+    {
+      numbered.map((g) => (
+        <>
+          {g.heading && (
+            <h3 class="mt-14 border-l-4 border-accent-500 pl-4 text-2xl text-steel-900 sm:text-3xl">
+              {g.heading}
+            </h3>
+          )}
+          <ul class="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4">
+            {g.tiles.map((t) => {
+              const alt = t.caption ?? `Casting ${t.n} of ${total}`;
+              return (
+                <li>
+                  <figure class="h-full">
+                    <Zoomable
+                      src={img(t.src)}
+                      alt={alt}
+                      caption={t.caption ?? ''}
+                      widths={[240, 400, 600]}
+                      sizes="(min-width: 1280px) 290px, (min-width: 1024px) 23vw, (min-width: 640px) 31vw, 46vw"
+                      eager={t.n <= FIRST_ROW}
+                      linkClass="aspect-square border border-steel-200 bg-steel-100"
+                      class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                    />
+                    {t.caption && (
+                      <figcaption class="mt-2 text-sm font-semibold text-steel-900">{t.caption}</figcaption>
+                    )}
+                  </figure>
+                </li>
+              );
+            })}
+          </ul>
+        </>
+      ))
+    }
+  </section>
+</PageLayout>

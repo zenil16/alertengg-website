@@ -1,0 +1,90 @@
+---
+import PageLayout from '../layouts/PageLayout.astro';
+import Zoomable from '../components/Zoomable.astro';
+import BulletList from '../components/BulletList.astro';
+import { headings, sectionAfter, blocksOf, img, type Block } from '../lib/content';
+import { inline } from '../lib/render';
+
+const SLUG = 'Foundry-Quality-Control';
+const [treatmentTitle, measurementTitle] = headings(SLUG, 3);
+
+const treatmentItems = sectionAfter(SLUG, treatmentTitle).find(
+  (b): b is Extract<Block, { kind: 'list' }> => b.kind === 'list',
+)!.items;
+const measurementParas = sectionAfter(SLUG, measurementTitle)
+  .filter((b): b is Extract<Block, { kind: 'para' }> => b.kind === 'para')
+  .map((b) => b.text);
+
+// Captured alts are bare filenames, so each photo is described from the page
+// text it illustrates. Thermo-Analysis-1.jpg was commented out on the live
+// site; the parser strips it with the comment, so it never reaches this list.
+const ALT: Record<string, string> = {
+  '/source-images/Foundry-Quality-Control/foundry-quality.png': 'Foundry quality control room',
+  '/source-images/Foundry-Quality-Control/Quality-control-2.jpg': 'Rotary degassing machine',
+  '/source-images/Foundry-Quality-Control/Quality-control-3.jpg': 'Pyrometer for temperature control',
+  '/source-images/Foundry-Quality-Control/melt-quality-equipment1.jpg': 'VAC Test system',
+  '/source-images/Foundry-Quality-Control/melt-quality-equipment2.jpg': 'Melt quality equipment',
+};
+const photos = blocksOf(SLUG, 'image').map((b) => ({ src: img(b.src), alt: ALT[b.src] }));
+const [room, degassing, pyrometer, vac, equipment2] = photos;
+---
+
+<PageLayout slug={SLUG} description={measurementParas[0]} lightbox>
+  <section class="shell section">
+    <Zoomable
+      src={room.src}
+      alt={room.alt}
+      widths={[640, 960, 1280, 1581]}
+      sizes="(min-width: 1280px) 1216px, 94vw"
+      eager
+      linkClass="border border-steel-200"
+      class="h-auto w-full"
+    />
+  </section>
+
+  <section class="border-t border-steel-200 bg-steel-50">
+    <div class="shell section grid items-start gap-10 lg:grid-cols-2 lg:gap-16">
+      <div>
+        <h2 class="eyebrow-rule text-3xl text-steel-900 sm:text-4xl">{treatmentTitle}</h2>
+        <BulletList items={treatmentItems} class="mt-6" />
+      </div>
+      <div class="grid grid-cols-2 items-end gap-5">
+        {
+          [degassing, pyrometer].map((p) => (
+            <Zoomable
+              src={p.src}
+              alt={p.alt}
+              widths={[240, 400, 600]}
+              sizes="(min-width: 1024px) 280px, 45vw"
+              linkClass="flex items-center justify-center border border-steel-200 bg-white p-3"
+              class="h-auto max-h-80 w-auto max-w-full object-contain"
+            />
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="shell section grid items-start gap-10 lg:grid-cols-2 lg:gap-16">
+    <div>
+      <h2 class="eyebrow-rule text-3xl text-steel-900 sm:text-4xl">{measurementTitle}</h2>
+      <div class="prose-copy mt-6">
+        {measurementParas.map((p) => <p set:html={inline(p)} />)}
+      </div>
+    </div>
+    <div class="grid grid-cols-2 items-end gap-5">
+      {
+        [vac, equipment2].map((p) => (
+          <Zoomable
+            src={p.src}
+            alt={p.alt}
+            widths={[350]}
+            sizes="(min-width: 1024px) 280px, 45vw"
+            linkClass="flex items-center justify-center border border-steel-200 bg-white p-3"
+            class="h-auto w-full object-contain"
+          />
+        ))
+      }
+    </div>
+  </section>
+</PageLayout>

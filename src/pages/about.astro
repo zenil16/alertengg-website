@@ -1,0 +1,44 @@
+---
+import PageLayout from '../layouts/PageLayout.astro';
+import Zoomable from '../components/Zoomable.astro';
+import { paragraphs, blocksOf, img } from '../lib/content';
+import { inline } from '../lib/render';
+
+const SLUG = 'about-us';
+const copy = paragraphs(SLUG);
+
+// The captured alts are bare filenames; these describe what each photo shows.
+const ALTS = [
+  'Front of the Alert Engineering Works factory with its name board',
+  'Alert Engineering Works factory seen from the road',
+  'Alert Engineering Works factory building',
+];
+const photos = blocksOf(SLUG, 'image').map((b, i) => ({ src: img(b.src), alt: ALTS[i] }));
+---
+
+<PageLayout slug={SLUG} description={copy[1]} lightbox>
+  <section class="shell section grid gap-12 lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)] lg:gap-16">
+    <div class="prose-copy">
+      <p class="text-lg font-medium text-steel-900" set:html={inline(copy[0])} />
+      {copy.slice(1).map((p) => <p set:html={inline(p)} />)}
+    </div>
+
+    <ul class="grid content-start gap-5 sm:grid-cols-2 lg:grid-cols-1" aria-label="Factory photographs">
+      {
+        photos.map((p, i) => (
+          <li class:list={[i === 0 && 'sm:col-span-2 lg:col-span-1']}>
+            <Zoomable
+              src={p.src}
+              alt={p.alt}
+              widths={[400, 640, 960]}
+              sizes="(min-width: 1024px) 460px, (min-width: 640px) 45vw, 90vw"
+              eager={i === 0}
+              linkClass="border border-steel-200"
+              class="h-auto w-full"
+            />
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+</PageLayout>

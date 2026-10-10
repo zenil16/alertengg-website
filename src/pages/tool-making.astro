@@ -1,0 +1,37 @@
+---
+import PageLayout from '../layouts/PageLayout.astro';
+import FigureCard from '../components/FigureCard.astro';
+import { headings, figures, plain } from '../lib/content';
+
+const SLUG = 'Tool-Making';
+
+// Each mould photo with the caption that sits beside it in the capture. The
+// live site's alt attributes on tool3/tool4 were swapped (INVENTORY §6.4); the
+// captured Markdown already pairs each FILE with its correct caption, and the
+// alt text here comes from that caption, not the old alt.
+const moulds = figures(SLUG).map((f) => ({ fig: f, alt: plain(f.text[0]) }));
+const [closing] = headings(SLUG, 3);
+---
+
+<PageLayout slug={SLUG} description={closing} lightbox>
+  <section class="shell section">
+    <div class="grid gap-6 sm:grid-cols-2">
+      {
+        moulds.map(({ fig, alt }, i) => (
+          <FigureCard
+            fig={fig}
+            alt={alt}
+            aspect="aspect-[9/7]"
+            widths={[450]}
+            sizes="(min-width: 640px) 450px, 90vw"
+            eager={i < 2}
+          />
+        ))
+      }
+    </div>
+
+    <h2 class="mt-14 border-l-4 border-accent-500 bg-steel-50 px-6 py-6 text-xl leading-snug text-steel-900 sm:text-2xl">
+      {closing}
+    </h2>
+  </section>
+</PageLayout>

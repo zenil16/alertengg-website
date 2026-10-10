@@ -1,0 +1,37 @@
+---
+/**
+ * The one way inner pages render a captured photo: AVIF with a WebP fallback,
+ * explicit width/height (no layout shift), lazy by default.
+ * Requested widths larger than the original are dropped — never upscale.
+ */
+import { Picture } from 'astro:assets';
+
+interface Props {
+  src: ImageMetadata;
+  alt: string;
+  widths: number[];
+  sizes: string;
+  /** Above-the-fold images only. */
+  eager?: boolean;
+  class?: string;
+  pictureClass?: string;
+}
+const { src, alt, widths, sizes, eager = false, class: className, pictureClass } = Astro.props;
+
+const finalWidths = [
+  ...new Set([...widths.filter((w) => w < src.width), Math.min(src.width, Math.max(...widths))]),
+];
+---
+
+<Picture
+  src={src}
+  alt={alt}
+  formats={['avif']}
+  fallbackFormat="webp"
+  widths={finalWidths}
+  sizes={sizes}
+  loading={eager ? 'eager' : 'lazy'}
+  decoding="async"
+  pictureAttributes={pictureClass ? { class: pictureClass } : undefined}
+  class={className}
+/>

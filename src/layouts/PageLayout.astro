@@ -1,0 +1,40 @@
+---
+/**
+ * Shell for every inner page: BaseLayout (header, footer, WhatsApp button)
+ * + the H1/breadcrumb band + the closing Request a Quote band.
+ *
+ * Title, H1 and breadcrumb all come from the page's own captured Markdown.
+ */
+import BaseLayout from './BaseLayout.astro';
+import PageHeader from '../components/PageHeader.astro';
+import QuoteCta from '../components/QuoteCta.astro';
+import Lightbox from '../components/Lightbox.astro';
+import { page, headings } from '../lib/content';
+
+interface Props {
+  /** Captured page basename in /content/pages, e.g. `about-us`. */
+  slug: string;
+  /**
+   * Unique meta description from this page's own text. Defaults to the
+   * captured meta description — pass one only where the captured tag was the
+   * site-wide generic string.
+   */
+  description?: string;
+  /** Omit the closing quote band (the contact page IS the quote form). */
+  cta?: boolean;
+  /** Include the shared image viewer. */
+  lightbox?: boolean;
+}
+const { slug, description, cta = true, lightbox = false } = Astro.props;
+
+const { frontmatter } = page(slug);
+const h1 = headings(slug, 2)[0];
+const crumb = frontmatter.breadcrumb.split('/').pop()!.trim();
+---
+
+<BaseLayout title={frontmatter.title} description={description ?? frontmatter.meta_description}>
+  <PageHeader title={h1} crumb={crumb} />
+  <slot />
+  {cta && <QuoteCta />}
+  {lightbox && <Lightbox />}
+</BaseLayout>

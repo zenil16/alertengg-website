@@ -1,0 +1,33 @@
+---
+import PageLayout from '../layouts/PageLayout.astro';
+import FigureCard from '../components/FigureCard.astro';
+import { paragraphs, headings, figures } from '../lib/content';
+
+const SLUG = 'certification';
+const [intro] = paragraphs(SLUG);
+const [, title] = headings(SLUG, 2);
+const certs = figures(SLUG);
+---
+
+<PageLayout slug={SLUG} description={intro} lightbox>
+  <section class="shell section">
+    <div class="max-w-3xl">
+      <h2 class="eyebrow-rule text-3xl text-steel-900 sm:text-4xl">{title}</h2>
+      <p class="prose-copy mt-6">{intro}</p>
+    </div>
+
+    <div class="mt-12 grid gap-8 md:grid-cols-2 lg:gap-12">
+      {
+        certs.map((fig, i) => (
+          <FigureCard
+            fig={fig}
+            widths={[360, 560, 760]}
+            sizes="(min-width: 1280px) 580px, (min-width: 768px) 45vw, 90vw"
+            fit="contain"
+            eager={i === 0}
+          />
+        ))
+      }
+    </div>
+  </section>
+</PageLayout>

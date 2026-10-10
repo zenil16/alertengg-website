@@ -1,0 +1,13 @@
+---
+import { inline } from '../lib/render';
+
+interface Props {
+  items: string[];
+  class?: string;
+}
+const { items, class: className = '' } = Astro.props;
+---
+
+<ul class:list={['bullet-list', className]}>
+  {items.map((item) => <li set:html={inline(item)} />)}
+</ul>
