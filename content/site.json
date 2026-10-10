@@ -1,0 +1,151 @@
+{
+  "company_name": "Alert Engineering Works",
+  "founded": 1982,
+  "tagline": "Alert Engineering Works specializes in Aluminum Alloy Permanent Mold Casting (Gravity Die Casting), Sand Casting and Precision Machining.",
+  "meta_description": "Alert Engineering Works specializes in Aluminum Alloy Permanent Mold Casting (Gravity Die Casting), Sand Casting and Precision Machining.",
+  "meta_keywords": "Aluminum Alloy Permanent Mold Casting (Gravity Die Casting), Sand Casting and Precision Machining.",
+  "home_page_title": "Welcome To Alert Engineering Works",
+
+  "contact": {
+    "person": "Mehul Patel",
+    "phone": "9327942888",
+    "emails": [
+      "info@alertengg.com",
+      "sales@alertengg.com"
+    ],
+    "email_obfuscation_note": "Both addresses are Cloudflare email-protected in the live HTML (span.__cf_email__ / data-cfemail). Decoded from source: the first hex byte is the XOR key for the remaining bytes.",
+    "address": {
+      "full_footer": "C-1/2308, 3rd Phase, G.I.D.C, vapi - Gujarat, INDIA.",
+      "full_contact_page": "C-1/2308, 3rd Phase, G.I.D.C, vapi - Gujarat, INDIA.",
+      "unit": "C-1/2308",
+      "phase": "3rd Phase",
+      "estate": "G.I.D.C",
+      "city": "Vapi",
+      "state": "Gujarat",
+      "country": "INDIA"
+    },
+    "whatsapp": {
+      "url": "https://wa.me/919327942888",
+      "href_in_source": "https://wa.me/919327942888?text=Hi%20There!",
+      "prefilled_text": "Hi There!",
+      "icon": "/source-images/shared/whatsapp.gif"
+    }
+  },
+
+  "google_maps_embed_url": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3740.310149039247!2d72.94543201444414!3d20.370098215313362!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be0ce2e9f2d2809%3A0x759ba53036ca6033!2sAlert%20Engineering%20Works!5e0!3m2!1sen!2sin!4v1616410457520!5m2!1sen!2sin",
+  "google_maps_embed": {
+    "width": "80%",
+    "height": "300px",
+    "loading": "lazy",
+    "allowfullscreen": true,
+    "place_label": "Alert Engineering Works",
+    "latitude": 20.370098215313362,
+    "longitude": 72.94543201444414,
+    "place_id_param": "0x3be0ce2e9f2d2809:0x759ba53036ca6033"
+  },
+
+  "contact_form": {
+    "provider": "JotForm",
+    "form_id": "222451131643445",
+    "form_name": "form_222451131643445",
+    "action": "https://submit.jotform.com/submit/222451131643445/",
+    "method": "post",
+    "embed_type": "inline HTML form in page source (not an iframe)",
+    "scripts": [
+      "https://cdn03.jotfor.ms/static/prototype.forms.js?3.3.35624",
+      "https://cdn01.jotfor.ms/static/jotform.forms.js?3.3.35624"
+    ],
+    "header_image": "/source-images/contact/logo.6312ed593f7110.66565181.png",
+    "header_image_source": "https://www.jotform.com/uploads/Alert_Engineering/form_files/logo.6312ed593f7110.66565181.png",
+    "honeypot_field": "website",
+    "fields": [
+      { "qid": 3,  "input_id": "input_3",  "name": "q3_firstName", "label": "First Name *", "type": "textbox",  "required": true },
+      { "qid": 11, "input_id": "input_11", "name": "q11_phone",    "label": "Phone *",      "type": "textbox",  "required": true },
+      { "qid": 10, "input_id": "input_10", "name": "q10_email10",  "label": "E-mail *",     "type": "textbox",  "required": true },
+      { "qid": 9,  "input_id": "input_9",  "name": "q9_lastName",  "label": "Subject *",    "type": "textbox",  "required": true,
+        "note": "JotForm's internal field name is lastName, but the visible label on the page is 'Subject'." },
+      { "qid": 19, "input_id": "input_19", "name": "q19_message",  "label": "Message *",    "type": "textarea", "required": true },
+      { "qid": 8,  "input_id": "input_8",  "name": "submit",       "label": "Submit",       "type": "button",   "required": false }
+    ]
+  },
+
+  "footer": {
+    "about_heading": "About Us",
+    "about_text": "The company was established in 1982 by a team of Experienced entrepreneurs, in an endeavor to produce high tech, good quality castings in Aluminum alloys using permanent mold casting process.",
+    "copyright": "© Copyright Alert Engineering Works. All Rights Reserved",
+    "credit_text": "Designed by Accuarte Management",
+    "credit_url": "https://www.websitedesignvapi.com/",
+    "get_in_touch_heading": "Get in Touch",
+    "icons": {
+      "person": "/source-images/shared/icon%20person.png",
+      "phone": "/source-images/shared/phone.jpg",
+      "email": "/source-images/shared/email.png",
+      "address": "/source-images/shared/address.jpg"
+    },
+    "social_links": [
+      { "network": "twitter",     "href": "#", "icon": "bx bxl-twitter",   "status": "placeholder" },
+      { "network": "facebook",    "href": "#", "icon": "bx bxl-facebook",  "status": "placeholder" },
+      { "network": "instagram",   "href": "#", "icon": "bx bxl-instagram", "status": "placeholder" },
+      { "network": "google-plus", "href": "#", "icon": "bx bxl-skype",     "status": "placeholder" },
+      { "network": "linkedin",    "href": "#", "icon": "bx bxl-linkedin",  "status": "placeholder" }
+    ],
+    "get_in_touch_links_status": "All four Get in Touch entries (person, phone, email, address) link to href=\"##\" in the live source."
+  },
+
+  "branding": {
+    "logo": "/source-images/shared/alert-engineering-works-logo.png",
+    "logo_rendered_size": "400x40",
+    "favicon": "/source-images/shared/favicon.png",
+    "home_banner": "/source-images/shared/banner.png"
+  },
+
+  "nav": [
+    { "label": "Home", "href": "index" },
+    {
+      "label": "The Company",
+      "href": "#",
+      "children": [
+        { "label": "About Us", "href": "about-us" },
+        { "label": "Certification", "href": "certification" }
+      ]
+    },
+    {
+      "label": "Facilities",
+      "href": "#",
+      "children": [
+        { "label": "Aluminium Foundry", "href": "Aluminium-Foundry" },
+        { "label": "Machine Shop", "href": "Machine-Shop" },
+        { "label": "Casting Design", "href": "Casting-Design" },
+        { "label": "Tool Making", "href": "Tool-Making" },
+        { "label": "Foundry Quality Control", "href": "Foundry-Quality-Control" }
+      ]
+    },
+    { "label": "Gallery", "href": "gallery" },
+    { "label": "Quality Policy", "href": "quality-policy" },
+    { "label": "Contact", "href": "contact" }
+  ],
+
+  "footer_nav": {
+    "Product Range": [
+      { "label": "Aluminium Foundry", "href": "Aluminium-Foundry" },
+      { "label": "Machine Shop", "href": "Machine-Shop" },
+      { "label": "Casting Design", "href": "Casting-Design" },
+      { "label": "Tool Making", "href": "Tool-Making" },
+      { "label": "Foundry Quality Control", "href": "Foundry-Quality-Control" }
+    ],
+    "Other Links": [
+      { "label": "Home", "href": "index" },
+      { "label": "About Us", "href": "about-us" },
+      { "label": "Gallery", "href": "gallery" },
+      { "label": "Quality Policy", "href": "quality-policy" },
+      { "label": "Contact", "href": "contact" }
+    ]
+  },
+
+  "capture": {
+    "captured_on": "2026-10-10",
+    "source_site": "https://www.alertengg.com/",
+    "pages_captured": 11,
+    "template_credit": "BootstrapMade 'Company' free HTML bootstrap template"
+  }
+}
