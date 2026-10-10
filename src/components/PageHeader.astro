@@ -4,7 +4,7 @@
  * (Home › Section › Page). "Section" is the nav group label; it has no page
  * of its own, so it is plain text rather than a link.
  */
-import { sectionOf } from '../lib/nav';
+import { sectionOf, route } from '../lib/nav';
 
 interface Props {
   title: string;
@@ -19,7 +19,7 @@ const section = sectionOf(Astro.url.pathname);
   <div class="shell py-10 sm:py-14">
     <nav aria-label="Breadcrumb">
       <ol class="flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-steel-400">
-        <li><a href="/" class="hover:text-accent-400 hover:underline">Home</a></li>
+        <li><a href={route('index')} class="hover:text-accent-400 hover:underline">Home</a></li>
         {
           section && (
             <li class="flex items-center gap-2">

@@ -3,8 +3,9 @@
  * captured page slugs onto the new clean URLs (CLAUDE.md -> URLs).
  */
 import { site } from './content';
+import { withBase } from './paths';
 
-/** Captured page slug -> clean URL. */
+/** Captured page slug -> clean URL (without the deploy base; see `route()`). */
 export const ROUTES: Record<string, string> = {
   index: '/',
   'about-us': '/about',
@@ -19,10 +20,11 @@ export const ROUTES: Record<string, string> = {
   contact: '/contact',
 };
 
+/** Captured page slug -> href, including the deploy base path. */
 export function route(slug: string): string {
   const r = ROUTES[slug];
   if (!r) throw new Error(`No clean URL mapped for captured slug: ${slug}`);
-  return r;
+  return withBase(r);
 }
 
 export interface NavItem {

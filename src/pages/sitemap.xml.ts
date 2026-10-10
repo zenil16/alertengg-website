@@ -3,10 +3,11 @@
  * `.html` redirect stubs and the 404 page are deliberately not listed.
  */
 import type { APIRoute } from 'astro';
-import { ROUTES } from '../lib/nav';
+import { ROUTES, route } from '../lib/nav';
 
 export const GET: APIRoute = ({ site }) => {
-  const urls = Object.values(ROUTES)
+  const urls = Object.keys(ROUTES)
+    .map((slug) => route(slug))
     .map((path) => `  <url><loc>${new URL(path, site).href}</loc></url>`)
     .join('\n');
   const body = `<?xml version="1.0" encoding="UTF-8"?>

@@ -97,6 +97,10 @@ applied by Cloudflare at the edge (including `/index.html` → `/`). Do **not** 
 Astro `redirects` (they emit `about-us.html/` folders) and never add an SSR adapter:
 this is a static-assets-only Worker (`wrangler.jsonc`). See `DEPLOY.md`.
 
+Internal links must respect the deploy base path (the GitHub Pages preview lives
+under `/alertengg-website/`): use `route('<captured-slug>')` or `withBase('/path')`,
+never a hard-coded `href="/…"`. See `DEPLOY.md`.
+
 ## Design direction
 Clean, industrial, trustworthy. Dark slate/steel neutrals, **one** accent colour
 (molten orange — see `src/styles/global.css`), generous white space, strong modern

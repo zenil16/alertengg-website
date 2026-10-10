@@ -1,0 +1,46 @@
+# Shareable preview on GitHub Pages: https://zenil16.github.io/alertengg-website/
+#
+# Builds with DEPLOY_TARGET=github-pages so astro.config.mjs sets the
+# zenil16.github.io site and the /alertengg-website base path. Production
+# (Cloudflare, www.alertengg.com) is a separate build without that variable.
+name: Deploy preview to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# One deploy at a time; a newer push replaces a queued one, but an
+# in-progress deploy is allowed to finish.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      DEPLOY_TARGET: github-pages
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+      - name: Build with Astro and upload Pages artifact
+        uses: withastro/action@v6
+        with:
+          node-version: 22
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v5

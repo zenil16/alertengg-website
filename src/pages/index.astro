@@ -3,6 +3,7 @@ import { Picture } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Icon from '../components/Icon.astro';
 import QuoteCta from '../components/QuoteCta.astro';
+import { route } from '../lib/nav';
 import { page, paragraphs, plainNoLinks, img, site } from '../lib/content';
 
 const home = page('index');
@@ -22,25 +23,25 @@ const banner = img(site.branding.home_banner);
 const services = [
   {
     name: 'Gravity Die Casting',
-    href: '/aluminium-foundry',
+    href: route('Aluminium-Foundry'),
     image: img('/source-images/Aluminium-Foundry/Aluminium foundry1.jpeg'),
     alt: 'Foundry vessel used in aluminium casting operations',
   },
   {
     name: 'Sand Casting',
-    href: '/aluminium-foundry',
+    href: route('Aluminium-Foundry'),
     image: img('/source-images/Aluminium-Foundry/aluminium_foundry4.jpg'),
     alt: 'Aluminium foundry melting and holding area',
   },
   {
     name: 'Precision Machining',
-    href: '/machine-shop',
+    href: route('Machine-Shop'),
     image: img('/source-images/Machine-Shop/machine_shop2.jpg'),
     alt: 'Machining equipment arranged across the production work area',
   },
   {
     name: 'Tool Mould Making',
-    href: '/tool-making',
+    href: route('Tool-Making'),
     image: img('/source-images/Tool-Making/tool1.jpg'),
     alt: 'Mold For Gravity Die',
   },
@@ -78,11 +79,11 @@ const aboutPhoto = img('/source-images/about-us/alert1_1771251175535.jpg');
           {intro}
         </p>
         <div class="mt-9 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-          <a href="/contact" class="btn btn-accent">
+          <a href={route('contact')} class="btn btn-accent">
             Request a Quote
             <Icon name="arrow" size={18} />
           </a>
-          <a href="/gallery" class="btn btn-outline-light">Our Product Gallery</a>
+          <a href={route('gallery')} class="btn btn-outline-light">Our Product Gallery</a>
         </div>
       </div>
     </div>
@@ -107,7 +108,7 @@ const aboutPhoto = img('/source-images/about-us/alert1_1771251175535.jpg');
           <p class="font-display text-xl font-semibold text-steel-900">ISO 9001:2015</p>
           <p class="text-sm text-steel-600">
             <a
-              href="/certification"
+              href={route('certification')}
               class="underline decoration-steel-300 underline-offset-2 hover:text-accent-700"
             >
               Certified Quality Management System
@@ -181,7 +182,7 @@ const aboutPhoto = img('/source-images/about-us/alert1_1771251175535.jpg');
           {plainNoLinks(experience)}
         </p>
         <a
-          href="/about"
+          href={route('about-us')}
           class="mt-7 inline-flex items-center gap-2 font-display font-semibold uppercase tracking-wide text-accent-700 hover:text-accent-800"
         >
           Read More

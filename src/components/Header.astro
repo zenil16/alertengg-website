@@ -1,7 +1,7 @@
 ---
 import { Picture } from 'astro:assets';
 import { img, site } from '../lib/content';
-import { NAV, isActive, isCurrent } from '../lib/nav';
+import { NAV, isActive, isCurrent, route } from '../lib/nav';
 import Icon from './Icon.astro';
 
 const logo = img(site.branding.logo);
@@ -10,7 +10,7 @@ const current = Astro.url.pathname;
 
 <header class="sticky top-0 z-40 bg-white border-b border-steel-200">
   <div class="shell flex items-center gap-4 py-3 lg:py-4">
-    <a href="/" class="shrink-0" aria-label="Alert Engineering Works — home">
+    <a href={route('index')} class="shrink-0" aria-label="Alert Engineering Works — home">
       <Picture
         src={logo}
         alt="Alert Engineering Works"
@@ -77,7 +77,7 @@ const current = Astro.url.pathname;
       </ul>
     </nav>
 
-    <a href="/contact" class="btn btn-accent ml-auto hidden text-sm lg:ml-4 lg:inline-flex">
+    <a href={route('contact')} class="btn btn-accent ml-auto hidden text-sm lg:ml-4 lg:inline-flex">
       Request a Quote
     </a>
 
@@ -152,7 +152,7 @@ const current = Astro.url.pathname;
           )
         }
       </ul>
-      <a href="/contact" class="btn btn-accent mt-5 w-full">Request a Quote</a>
+      <a href={route('contact')} class="btn btn-accent mt-5 w-full">Request a Quote</a>
     </nav>
   </div>
 </header>

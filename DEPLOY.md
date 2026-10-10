@@ -93,3 +93,28 @@ curl -sI http://localhost:8787/about-us.html   # 301 → /about
 curl -sI http://localhost:8787/index.html      # 301 → /
 curl -sI http://localhost:8787/nope            # 404 (404.html)
 ```
+
+---
+
+# GitHub Pages preview
+
+A shareable preview is published to **https://zenil16.github.io/alertengg-website/**
+by `.github/workflows/deploy-pages.yml` on every push to `main` (it can also be run
+by hand from the Actions tab).
+
+| | Production (Cloudflare) | Preview (GitHub Pages) |
+|---|---|---|
+| Build | `npm run build` | `DEPLOY_TARGET=github-pages npm run build` |
+| `site` | `https://www.alertengg.com` | `https://zenil16.github.io` |
+| `base` | none | `/alertengg-website` |
+
+`astro.config.mjs` switches on `DEPLOY_TARGET`; nothing else differs.
+
+**Base path rule:** never write a root-relative internal link (`href="/contact"`).
+Use `route('contact')` from `src/lib/nav.ts` (captured page slugs) or `withBase()`
+from `src/lib/paths.ts`. Images from `astro:assets` include the base automatically.
+
+**What the preview does not do:** GitHub Pages ignores `_redirects` and
+`_headers`, so the old `.html` URLs do not redirect there, and the security and
+cache headers are not sent. `/about` is answered with a redirect to `/about/`
+(GitHub Pages' folder handling). All of this works on Cloudflare.

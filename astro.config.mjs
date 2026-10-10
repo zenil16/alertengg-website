@@ -7,8 +7,14 @@ import tailwindcss from '@tailwindcss/vite';
  * Cloudflare Worker (wrangler.jsonc). Legacy `.html` URLs are 301-redirected
  * at the edge by public/_redirects, not by Astro (see DEPLOY.md).
  */
+const githubPages = process.env.DEPLOY_TARGET === 'github-pages';
+
 export default defineConfig({
-  site: 'https://www.alertengg.com',
+  // DEPLOY_TARGET=github-pages builds the shareable preview served from
+  // https://zenil16.github.io/alertengg-website/ (see .github/workflows).
+  // Any other build is production: the real domain, no base path.
+  site: githubPages ? 'https://zenil16.github.io' : 'https://www.alertengg.com',
+  base: githubPages ? '/alertengg-website' : undefined,
   output: 'static',
   trailingSlash: 'ignore',
 

@@ -1,6 +1,7 @@
 ---
 import { site, tel, phoneDisplay } from '../lib/content';
 import Icon from './Icon.astro';
+import { route } from '../lib/nav';
 ---
 
 {/* The Request a Quote band that closes Home and every inner page. */}
@@ -15,7 +16,7 @@ import Icon from './Icon.astro';
         <a href={tel} class="text-accent-400 hover:underline">{phoneDisplay}</a>
       </p>
     </div>
-    <a href="/contact" class="btn btn-accent shrink-0">
+    <a href={route('contact')} class="btn btn-accent shrink-0">
       Contact Us
       <Icon name="arrow" size={18} />
     </a>

@@ -2,7 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Icon from '../components/Icon.astro';
 import { site } from '../lib/content';
-import { NAV } from '../lib/nav';
+import { NAV, route } from '../lib/nav';
 
 // Every real page, flattened from the nav, so a lost visitor has somewhere to go.
 const pages = NAV.flatMap((item) => (item.children ? item.children : [{ label: item.label, href: item.href! }]));
@@ -18,11 +18,11 @@ const pages = NAV.flatMap((item) => (item.children ? item.children : [{ label: i
         The page you are looking for doesn’t exist or has moved.
       </p>
       <div class="mt-8 flex flex-col gap-3 sm:flex-row">
-        <a href="/" class="btn btn-accent">
+        <a href={route('index')} class="btn btn-accent">
           Go to Home
           <Icon name="arrow" size={18} />
         </a>
-        <a href="/contact" class="btn btn-outline-light">Request a Quote</a>
+        <a href={route('contact')} class="btn btn-outline-light">Request a Quote</a>
       </div>
     </div>
   </section>
