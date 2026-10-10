@@ -1,0 +1,49 @@
+---
+/**
+ * Inline SVG icons at the size they render.
+ * These replace the originals' oversized rasters (phone.jpg was 2133x2133 to
+ * draw a 25x25 glyph) — see CLAUDE.md -> Images.
+ */
+interface Props {
+  name: 'phone' | 'mail' | 'pin' | 'person' | 'whatsapp' | 'chevron' | 'menu' | 'close' | 'arrow' | 'shield' | 'calendar';
+  class?: string;
+  size?: number;
+}
+const { name, class: className = '', size = 20 } = Astro.props;
+
+const paths: Record<Props['name'], string> = {
+  phone:
+    '<path d="M6.6 2.5a1.5 1.5 0 0 1 2 .5l1.4 2.3a1.5 1.5 0 0 1-.3 1.9l-1 .9a10.5 10.5 0 0 0 4.8 4.8l.9-1a1.5 1.5 0 0 1 1.9-.3l2.3 1.4a1.5 1.5 0 0 1 .5 2l-.7 1.6a2.5 2.5 0 0 1-2.9 1.4C10.6 17.6 5 12 3.6 6a2.5 2.5 0 0 1 1.4-2.9z"/>',
+  mail:
+    '<path d="M3 5.5h18v13H3z" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="m3.5 6 8.5 6.5L20.5 6" fill="none" stroke="currentColor" stroke-width="1.8"/>',
+  pin:
+    '<path d="M12 2.5a6.5 6.5 0 0 1 6.5 6.5c0 4.6-6.5 12-6.5 12S5.5 13.6 5.5 9A6.5 6.5 0 0 1 12 2.5m0 4.2A2.3 2.3 0 1 0 12 11a2.3 2.3 0 0 0 0-4.3"/>',
+  person:
+    '<path d="M12 3a4 4 0 1 1 0 8 4 4 0 0 1 0-8m0 10c4.2 0 7.5 2.1 7.5 4.7V21h-15v-3.3C4.5 15.1 7.8 13 12 13"/>',
+  whatsapp:
+    '<path d="M12.04 2C6.6 2 2.2 6.4 2.2 11.84c0 1.9.53 3.68 1.45 5.2L2 22l5.1-1.6a9.8 9.8 0 0 0 4.94 1.33h.01c5.43 0 9.84-4.4 9.84-9.84C21.89 6.4 17.48 2 12.04 2m5.73 13.9c-.24.68-1.4 1.3-1.93 1.35-.53.05-1.02.24-3.45-.72-2.92-1.16-4.75-4.2-4.9-4.4-.14-.2-1.16-1.55-1.16-2.96 0-1.4.73-2.1 1-2.38.26-.29.57-.36.76-.36l.55.01c.17 0 .41-.07.63.48l.87 2.1c.07.15.12.32.02.5l-.3.46-.44.48c-.14.14-.29.3-.13.58.17.29.73 1.2 1.56 1.95 1.07.95 1.98 1.25 2.26 1.39.29.14.46.12.63-.07l.9-1.04c.22-.26.4-.19.67-.09l1.9.9c.27.14.46.2.53.32.07.12.07.68-.17 1.35"/>',
+  chevron:
+    '<path d="M6.5 9 12 14.5 17.5 9" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>',
+  menu:
+    '<path d="M3.5 6.5h17M3.5 12h17M3.5 17.5h17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>',
+  close:
+    '<path d="M5.5 5.5l13 13M18.5 5.5l-13 13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>',
+  arrow:
+    '<path d="M4 12h15m0 0-5.5-5.5M19 12l-5.5 5.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>',
+  shield:
+    '<path d="M12 2.5 4.5 5.4v5.3c0 4.6 3.1 8.9 7.5 10.3 4.4-1.4 7.5-5.7 7.5-10.3V5.4z" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="m8.6 11.8 2.4 2.4 4.4-4.4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>',
+  calendar:
+    '<path d="M4 6.5h16v14H4zM8 3v4m8-4v4M4 11h16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>',
+};
+---
+
+<svg
+  class={className}
+  width={size}
+  height={size}
+  viewBox="0 0 24 24"
+  fill="currentColor"
+  aria-hidden="true"
+  focusable="false"
+  set:html={paths[name]}
+/>

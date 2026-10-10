@@ -1,0 +1,235 @@
+---
+import { Picture } from 'astro:assets';
+import { img, site } from '../lib/content';
+import { NAV, isActive } from '../lib/nav';
+import Icon from './Icon.astro';
+
+const logo = img(site.branding.logo);
+const current = Astro.url.pathname;
+---
+
+<header class="sticky top-0 z-40 bg-white border-b border-steel-200">
+  <div class="shell flex items-center gap-4 py-3 lg:py-4">
+    <a href="/" class="shrink-0" aria-label="Alert Engineering Works — home">
+      <Picture
+        src={logo}
+        alt="Alert Engineering Works"
+        formats={['avif', 'webp']}
+        widths={[200, 320, 440]}
+        sizes="(min-width: 1024px) 320px, 200px"
+        loading="eager"
+        fetchpriority="high"
+        class="h-8 w-auto lg:h-10"
+      />
+    </a>
+
+    <!-- Desktop nav -->
+    <nav aria-label="Main" class="ml-auto hidden lg:block">
+      <ul class="flex items-center gap-1">
+        {
+          NAV.map((item) =>
+            item.children ? (
+              <li class="relative" data-dropdown>
+                <button
+                  type="button"
+                  class="flex items-center gap-1 px-3 py-2 font-display text-[0.95rem] font-semibold uppercase tracking-wide text-steel-700 hover:text-accent-700 aria-expanded:text-accent-700"
+                  aria-expanded="false"
+                  data-dropdown-toggle
+                >
+                  {item.label}
+                  <Icon name="chevron" size={16} class="transition-transform duration-150" />
+                </button>
+                <ul
+                  class="absolute left-0 top-full hidden min-w-60 border border-steel-200 bg-white py-2 shadow-lg"
+                  data-dropdown-menu
+                >
+                  {item.children.map((child) => (
+                    <li>
+                      <a
+                        href={child.href}
+                        class="block px-4 py-2 text-sm text-steel-700 hover:bg-steel-50 hover:text-accent-700"
+                        aria-current={current === child.href ? 'page' : undefined}
+                      >
+                        {child.label}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </li>
+            ) : (
+              <li>
+                <a
+                  href={item.href}
+                  class="block px-3 py-2 font-display text-[0.95rem] font-semibold uppercase tracking-wide text-steel-700 hover:text-accent-700"
+                  aria-current={isActive(item, current) ? 'page' : undefined}
+                >
+                  {item.label}
+                </a>
+              </li>
+            ),
+          )
+        }
+      </ul>
+    </nav>
+
+    <a href="/contact" class="btn btn-accent ml-auto hidden text-sm lg:ml-4 lg:inline-flex">
+      Request a Quote
+    </a>
+
+    <!-- Mobile toggle -->
+    <button
+      type="button"
+      class="ml-auto inline-flex h-11 w-11 items-center justify-center text-steel-800 lg:hidden"
+      aria-expanded="false"
+      aria-controls="mobile-menu"
+      aria-label="Open menu"
+      data-menu-toggle
+    >
+      <Icon name="menu" size={26} data-menu-icon-open />
+      <Icon name="close" size={26} class="hidden" data-menu-icon-close />
+    </button>
+  </div>
+
+  <!-- Mobile menu -->
+  <div id="mobile-menu" class="hidden border-t border-steel-200 bg-white lg:hidden">
+    <nav aria-label="Main (mobile)" class="shell py-4">
+      <ul class="flex flex-col divide-y divide-steel-100">
+        {
+          NAV.map((item) =>
+            item.children ? (
+              <li class="py-1" data-m-group>
+                <button
+                  type="button"
+                  class="flex w-full items-center justify-between gap-2 py-3 text-left font-display text-base font-semibold uppercase tracking-wide text-steel-800"
+                  aria-expanded="false"
+                  data-m-toggle
+                >
+                  {item.label}
+                  <Icon name="chevron" size={18} class="transition-transform duration-150" />
+                </button>
+                <ul class="hidden pb-2 pl-3" data-m-panel>
+                  {item.children.map((child) => (
+                    <li>
+                      <a
+                        href={child.href}
+                        class="block border-l-2 border-steel-200 py-2.5 pl-4 text-steel-700 hover:border-accent-500 hover:text-accent-700"
+                        aria-current={current === child.href ? 'page' : undefined}
+                      >
+                        {child.label}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </li>
+            ) : (
+              <li>
+                <a
+                  href={item.href}
+                  class="block py-3 font-display text-base font-semibold uppercase tracking-wide text-steel-800 hover:text-accent-700"
+                  aria-current={isActive(item, current) ? 'page' : undefined}
+                >
+                  {item.label}
+                </a>
+              </li>
+            ),
+          )
+        }
+      </ul>
+      <a href="/contact" class="btn btn-accent mt-5 w-full">Request a Quote</a>
+    </nav>
+  </div>
+</header>
+
+<script>
+  // Mobile menu
+  const toggle = document.querySelector<HTMLButtonElement>('[data-menu-toggle]');
+  const panel = document.getElementById('mobile-menu');
+  const iconOpen = document.querySelector<SVGElement>('[data-menu-icon-open]');
+  const iconClose = document.querySelector<SVGElement>('[data-menu-icon-close]');
+
+  function setMenu(open: boolean) {
+    if (!toggle || !panel) return;
+    toggle.setAttribute('aria-expanded', String(open));
+    toggle.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+    panel.classList.toggle('hidden', !open);
+    iconOpen?.classList.toggle('hidden', open);
+    iconClose?.classList.toggle('hidden', !open);
+  }
+
+  toggle?.addEventListener('click', () =>
+    setMenu(toggle.getAttribute('aria-expanded') !== 'true'),
+  );
+
+  // Mobile submenus
+  document.querySelectorAll<HTMLElement>('[data-m-group]').forEach((group) => {
+    const btn = group.querySelector<HTMLButtonElement>('[data-m-toggle]');
+    const sub = group.querySelector<HTMLElement>('[data-m-panel]');
+    const chev = btn?.querySelector('svg');
+    btn?.addEventListener('click', () => {
+      const open = btn.getAttribute('aria-expanded') !== 'true';
+      btn.setAttribute('aria-expanded', String(open));
+      sub?.classList.toggle('hidden', !open);
+      chev?.classList.toggle('rotate-180', open);
+    });
+  });
+
+  // Desktop dropdowns: click to toggle, Escape to close, click-outside to close.
+  const dropdowns = Array.from(document.querySelectorAll<HTMLElement>('[data-dropdown]'));
+
+  function closeAll(except?: HTMLElement) {
+    dropdowns.forEach((d) => {
+      if (d === except) return;
+      d.querySelector('[data-dropdown-toggle]')?.setAttribute('aria-expanded', 'false');
+      d.querySelector('[data-dropdown-menu]')?.classList.add('hidden');
+      d.querySelector('[data-dropdown-toggle] svg')?.classList.remove('rotate-180');
+    });
+  }
+
+  dropdowns.forEach((d) => {
+    const btn = d.querySelector<HTMLButtonElement>('[data-dropdown-toggle]');
+    const menu = d.querySelector<HTMLElement>('[data-dropdown-menu]');
+    const chev = btn?.querySelector('svg');
+
+    btn?.addEventListener('click', () => {
+      const open = btn.getAttribute('aria-expanded') !== 'true';
+      closeAll(d);
+      btn.setAttribute('aria-expanded', String(open));
+      menu?.classList.toggle('hidden', !open);
+      chev?.classList.toggle('rotate-180', open);
+    });
+
+    // Pointer users get hover, keyboard users get click/focus — both work.
+    d.addEventListener('mouseenter', () => {
+      if (!window.matchMedia('(min-width: 1024px)').matches) return;
+      closeAll(d);
+      btn?.setAttribute('aria-expanded', 'true');
+      menu?.classList.remove('hidden');
+      chev?.classList.add('rotate-180');
+    });
+    d.addEventListener('mouseleave', () => {
+      if (!window.matchMedia('(min-width: 1024px)').matches) return;
+      if (d.contains(document.activeElement)) return;
+      closeAll();
+    });
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key !== 'Escape') return;
+    closeAll();
+    if (toggle?.getAttribute('aria-expanded') === 'true') {
+      setMenu(false);
+      toggle.focus();
+    }
+  });
+
+  document.addEventListener('click', (e) => {
+    const t = e.target as Node;
+    if (!dropdowns.some((d) => d.contains(t))) closeAll();
+  });
+
+  // Close an open dropdown when focus leaves it entirely (keyboard tab-out).
+  document.addEventListener('focusin', (e) => {
+    const t = e.target as Node;
+    if (!dropdowns.some((d) => d.contains(t))) closeAll();
+  });
+</script>

@@ -1,0 +1,225 @@
+---
+import { Picture } from 'astro:assets';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Icon from '../components/Icon.astro';
+import { page, paragraphs, plainNoLinks, img, site } from '../lib/content';
+
+const home = page('index');
+const [intro, experience] = paragraphs('index');
+
+// Hero uses the captured banner. Its left third is baked-in "WELCOME TO ALERT"
+// artwork from the old template, so the image is anchored right to show the
+// actual facility; the welcome words are real text on top.
+const banner = img(site.branding.home_banner);
+
+/**
+ * The four services named on the home page. The originals were 250x65 grey
+ * label graphics with the text baked in; the names are real text here and each
+ * card carries a real photograph from that facility's own captured images.
+ * Alt text is taken from the captured alt/captions in /content.
+ */
+const services = [
+  {
+    name: 'Gravity Die Casting',
+    href: '/aluminium-foundry',
+    image: img('/source-images/Aluminium-Foundry/Aluminium foundry1.jpeg'),
+    alt: 'Foundry vessel used in aluminium casting operations',
+  },
+  {
+    name: 'Sand Casting',
+    href: '/aluminium-foundry',
+    image: img('/source-images/Aluminium-Foundry/aluminium_foundry4.jpg'),
+    alt: 'Aluminium foundry melting and holding area',
+  },
+  {
+    name: 'Precision Machining',
+    href: '/machine-shop',
+    image: img('/source-images/Machine-Shop/machine_shop2.jpg'),
+    alt: 'Machining equipment arranged across the production work area',
+  },
+  {
+    name: 'Tool Mould Making',
+    href: '/tool-making',
+    image: img('/source-images/Tool-Making/tool1.jpg'),
+    alt: 'Mold For Gravity Die',
+  },
+];
+
+const aboutPhoto = img('/source-images/about-us/alert1_1771251175535.jpg');
+---
+
+<BaseLayout title={home.frontmatter.title} description={home.frontmatter.meta_description}>
+  {/* ============================================================ Hero */}
+  <section class="on-dark relative isolate bg-steel-950">
+    <Picture
+      src={banner}
+      alt="The Alert Engineering Works factory in G.I.D.C, Vapi, Gujarat"
+      formats={['avif', 'webp']}
+      fallbackFormat="jpeg"
+      widths={[768, 1280, 1339]}
+      sizes="100vw"
+      loading="eager"
+      fetchpriority="high"
+      pictureAttributes={{ class: 'absolute inset-0 -z-10' }}
+      class="h-full w-full object-cover object-right"
+    />
+    <div
+      class="absolute inset-0 -z-10 bg-gradient-to-r from-steel-950 via-steel-950/92 to-steel-950/60"
+    >
+    </div>
+
+    <div class="shell py-20 sm:py-28 lg:py-36">
+      <div class="max-w-2xl">
+        <h1 class="text-4xl leading-[1.05] text-white sm:text-5xl lg:text-6xl">
+          Welcome To Alert Engineering Works
+        </h1>
+        <p class="mt-6 text-base leading-relaxed text-steel-300 sm:text-lg">
+          {intro}
+        </p>
+        <div class="mt-9 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+          <a href="/contact" class="btn btn-accent">
+            Request a Quote
+            <Icon name="arrow" size={18} />
+          </a>
+          <a href="/gallery" class="btn btn-outline-light">Our Product Gallery</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {/* ===================================================== Trust strip */}
+  <section aria-label="Company credentials" class="border-b border-steel-200 bg-steel-50">
+    <div class="shell grid gap-px py-0 sm:grid-cols-3">
+      <div class="flex items-center gap-4 py-7 sm:pr-8">
+        <Icon name="calendar" size={28} class="shrink-0 text-accent-700" />
+        <div>
+          <p class="font-display text-xl font-semibold text-steel-900">
+            Established {site.founded}
+          </p>
+          <p class="text-sm text-steel-600">Aluminium alloy casting specialists</p>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-4 border-steel-200 py-7 sm:border-l sm:px-8">
+        <Icon name="shield" size={28} class="shrink-0 text-accent-700" />
+        <div>
+          <p class="font-display text-xl font-semibold text-steel-900">ISO 9001:2015</p>
+          <p class="text-sm text-steel-600">
+            <a
+              href="/certification"
+              class="underline decoration-steel-300 underline-offset-2 hover:text-accent-700"
+            >
+              Certified Quality Management System
+            </a>
+          </p>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-4 border-steel-200 py-7 sm:border-l sm:pl-8">
+        <Icon name="pin" size={28} class="shrink-0 text-accent-700" />
+        <div>
+          <p class="font-display text-xl font-semibold text-steel-900">
+            {site.contact.address.city}, {site.contact.address.state}
+          </p>
+          <p class="text-sm text-steel-600">
+            {site.contact.address.estate}, {site.contact.address.country}
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {/* ====================================================== Facilities */}
+  <section class="shell py-16 sm:py-20 lg:py-24">
+    <h2 class="eyebrow-rule text-3xl text-steel-900 sm:text-4xl">Facilities</h2>
+
+    <ul class="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+      {
+        services.map((service) => (
+          <li class="group">
+            <a
+              href={service.href}
+              class="flex h-full flex-col overflow-hidden border border-steel-200 bg-white transition-colors hover:border-accent-500"
+            >
+              <div class="aspect-[4/3] overflow-hidden bg-steel-100">
+                <Picture
+                  src={service.image}
+                  alt={service.alt}
+                  formats={['avif', 'webp']}
+                  fallbackFormat="jpeg"
+                  widths={[320, 480, 640]}
+                  sizes="(min-width: 1024px) 300px, (min-width: 640px) 45vw, 90vw"
+                  loading="lazy"
+                  decoding="async"
+                  class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                />
+              </div>
+              <div class="flex flex-1 items-center justify-between gap-3 px-5 py-4">
+                <h3 class="font-display text-lg font-semibold uppercase tracking-wide text-steel-900 group-hover:text-accent-700">
+                  {service.name}
+                </h3>
+                <Icon
+                  name="arrow"
+                  size={18}
+                  class="shrink-0 text-steel-400 transition-colors group-hover:text-accent-700"
+                />
+              </div>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+
+  {/* ========================================================= About us */}
+  <section class="border-t border-steel-200 bg-steel-50">
+    <div class="shell grid items-center gap-10 py-16 sm:py-20 lg:grid-cols-2 lg:gap-16 lg:py-24">
+      <div>
+        <h2 class="eyebrow-rule text-3xl text-steel-900 sm:text-4xl">About Us</h2>
+        <p class="mt-6 text-base leading-relaxed text-steel-700">
+          {plainNoLinks(experience)}
+        </p>
+        <a
+          href="/about"
+          class="mt-7 inline-flex items-center gap-2 font-display font-semibold uppercase tracking-wide text-accent-700 hover:text-accent-800"
+        >
+          Read More
+          <Icon name="arrow" size={18} />
+        </a>
+      </div>
+
+      <Picture
+        src={aboutPhoto}
+        alt="Aluminium castings produced at Alert Engineering Works"
+        formats={['avif', 'webp']}
+        fallbackFormat="jpeg"
+        widths={[480, 768, 996]}
+        sizes="(min-width: 1024px) 560px, 90vw"
+        loading="lazy"
+        decoding="async"
+        class="w-full border border-steel-200 object-cover"
+      />
+    </div>
+  </section>
+
+  {/* ============================================================== CTA */}
+  <section class="on-dark bg-steel-900">
+    <div
+      class="shell flex flex-col items-start gap-6 py-14 sm:flex-row sm:items-center sm:justify-between"
+    >
+      <div>
+        <h2 class="text-2xl text-white sm:text-3xl">Request a Quote</h2>
+        <p class="mt-2 text-steel-400">
+          Speak to {site.contact.person} on
+          <a href={`tel:+91${site.contact.phone}`} class="text-accent-400 hover:underline">
+            {site.contact.phone}
+          </a>
+        </p>
+      </div>
+      <a href="/contact" class="btn btn-accent shrink-0">
+        Contact Us
+        <Icon name="arrow" size={18} />
+      </a>
+    </div>
+  </section>
+</BaseLayout>
