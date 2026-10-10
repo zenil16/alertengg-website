@@ -92,8 +92,10 @@ Clean URLs, no `.html`:
 | `/quality-policy` | `/quality-policy.html` |
 | `/contact` | `/contact.html` |
 
-**Every old URL must redirect to its new URL** — configured in `astro.config.mjs`
-`redirects`, which emits static redirect pages for the `.html` paths.
+**Every old URL must redirect to its new URL** — true 301s in `public/_redirects`,
+applied by Cloudflare at the edge (including `/index.html` → `/`). Do **not** add
+Astro `redirects` (they emit `about-us.html/` folders) and never add an SSR adapter:
+this is a static-assets-only Worker (`wrangler.jsonc`). See `DEPLOY.md`.
 
 ## Design direction
 Clean, industrial, trustworthy. Dark slate/steel neutrals, **one** accent colour
@@ -114,4 +116,5 @@ typography via Google Fonts, large real photos from `/source-images`.
 npm run dev      # dev server
 npm run build    # static build to ./dist
 npm run preview  # serve ./dist
+npx wrangler deploy --dry-run   # validate the Cloudflare config (see DEPLOY.md)
 ```

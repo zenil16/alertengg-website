@@ -1,0 +1,18 @@
+// Static-assets-only Cloudflare Worker: no "main", no Worker script, no SSR.
+// `npm run build` writes the site to ./dist; `npx wrangler deploy` uploads it.
+// Redirects and headers come from dist/_redirects and dist/_headers
+// (sources in /public). See DEPLOY.md.
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "alertengg-website",
+  "compatibility_date": "2026-10-01",
+  "assets": {
+    "directory": "./dist",
+    // Unknown paths get dist/404.html with a real 404 status.
+    "not_found_handling": "404-page",
+    // Serve /about from about/index.html with no trailing-slash redirect, and
+    // send /about/ to /about — matching the clean URLs in nav, canonicals and
+    // sitemap.xml.
+    "html_handling": "drop-trailing-slash"
+  }
+}

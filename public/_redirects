@@ -1,0 +1,13 @@
+# Legacy URLs from the old BootstrapMade site → clean URLs. True 301s,
+# applied by Cloudflare before any asset is served.
+/index.html                     /                         301
+/about-us.html                  /about                    301
+/certification.html             /certification            301
+/Aluminium-Foundry.html         /aluminium-foundry        301
+/Machine-Shop.html              /machine-shop             301
+/Casting-Design.html            /casting-design           301
+/Tool-Making.html               /tool-making              301
+/Foundry-Quality-Control.html   /foundry-quality-control  301
+/gallery.html                   /gallery                  301
+/quality-policy.html            /quality-policy           301
+/contact.html                   /contact                  301
