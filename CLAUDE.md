@@ -14,7 +14,7 @@ BootstrapMade template with hand-edited HTML; this repo replaces it, but **not**
   the site.
 - **Do not fix the content conflicts** listed in `content/INVENTORY.md` §6 — the
   465 kg vs 500 kg contradiction, "30+ years" vs founded 1982, "Measurment",
-  "Vaccum", "Atmost", "Accuarte", ASTM grade "154", and the rest.
+  "Vaccum", "Atmost", ASTM grade "154", and the rest.
   **Spelling and fact fixes wait for owner sign-off.** Reproduce them as published.
 - No placeholder text. No Lorem ipsum. No stock imagery.
 
@@ -52,7 +52,9 @@ on the live site. They are captured for completeness and **must not be rendered*
   They are imported through Astro's image pipeline; never hand-optimise or overwrite.
 
 ## Contact details
-- Phone **9327942888** → `tel:+919327942888`.
+- Phone displays as **+91 93279 42888** and links as `tel:+919327942888`. Both live
+  once in `site.json` (`contact.phone.display` / `contact.phone.e164`); never hard-code them.
+- The footer carries no web-designer credit — only the copyright line.
 - **info@alertengg.com** and **sales@alertengg.com** → `mailto:` links.
 - No Cloudflare email obfuscation; plain mailto is correct here.
 

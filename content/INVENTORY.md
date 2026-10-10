@@ -346,7 +346,6 @@ Submissions will arrive under a "Last Name" column containing subject text.
 | Foundry-Quality-Control | "Melt Quality **Measurment**" (heading) |
 | Tool-Making | "**Vaccum** forming mold" |
 | about-us | "With **Atmost** Reliability" |
-| footer credit | "Designed by **Accuarte** Management" |
 | about-us, footer | "vapi" lowercase in the address; "**G.I.D.C**" without trailing period |
 | about-us | "10**gm**" vs Aluminium-Foundry "10 **g**" |
 | about-us | "**VAC-Test** System" vs Foundry-Quality-Control "**VAC Test** System" vs Aluminium-Foundry "a **vacuum test** system" |
@@ -394,13 +393,12 @@ Cloudflare `data-cfemail` attributes (first hex byte is the XOR key for the rest
 | Company | Alert Engineering Works |
 | Founded | 1982 |
 | Contact person | Mehul Patel |
-| Phone | 9327942888 |
+| Phone | +91 93279 42888 (`tel:+919327942888`) |
 | Email 1 | info@alertengg.com *(decoded)* |
 | Email 2 | sales@alertengg.com *(decoded)* |
 | Address | C-1/2308, 3rd Phase, G.I.D.C, vapi - Gujarat, INDIA. |
 | WhatsApp | https://wa.me/919327942888 *(source adds `?text=Hi%20There!`)* |
 | JotForm ID | 222451131643445 |
 | Maps coords | 20.370098215313362, 72.94543201444414 |
-| Footer credit | Designed by Accuarte Management — https://www.websitedesignvapi.com/ |
 | Template origin | BootstrapMade "Company" free HTML template |
 

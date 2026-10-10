@@ -8,7 +8,10 @@
 
   "contact": {
     "person": "Mehul Patel",
-    "phone": "9327942888",
+    "phone": {
+      "display": "+91 93279 42888",
+      "e164": "+919327942888"
+    },
     "emails": [
       "info@alertengg.com",
       "sales@alertengg.com"
@@ -73,8 +76,6 @@
     "about_heading": "About Us",
     "about_text": "The company was established in 1982 by a team of Experienced entrepreneurs, in an endeavor to produce high tech, good quality castings in Aluminum alloys using permanent mold casting process.",
     "copyright": "© Copyright Alert Engineering Works. All Rights Reserved",
-    "credit_text": "Designed by Accuarte Management",
-    "credit_url": "https://www.websitedesignvapi.com/",
     "get_in_touch_heading": "Get in Touch",
     "icons": {
       "person": "/source-images/shared/icon%20person.png",

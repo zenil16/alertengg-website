@@ -1,5 +1,5 @@
 ---
-import { site, tel, emails, mapsLink } from '../lib/content';
+import { site, tel, phoneDisplay, emails, mapsLink } from '../lib/content';
 import { FOOTER_NAV } from '../lib/nav';
 import Icon from './Icon.astro';
 
@@ -63,7 +63,7 @@ const year = new Date().getFullYear();
         </li>
         <li class="flex items-start gap-3">
           <Icon name="phone" size={18} class="mt-0.5 shrink-0 text-accent-500" />
-          <a href={tel} class="text-steel-300 hover:text-accent-400">{site.contact.phone}</a>
+          <a href={tel} class="text-steel-300 hover:text-accent-400">{phoneDisplay}</a>
         </li>
         <li class="flex items-start gap-3">
           <Icon name="mail" size={18} class="mt-0.5 shrink-0 text-accent-500" />
@@ -93,25 +93,20 @@ const year = new Date().getFullYear();
   </div>
 
   <div class="border-t border-steel-800">
-    <div
-      class="shell flex flex-col gap-2 py-6 text-xs text-steel-500 sm:flex-row sm:items-center sm:justify-between"
-    >
+    <div class="shell py-6 text-xs text-steel-500">
       <p>
-        &copy; Copyright {year}
+        &copy; Copyright <span data-copyright-year>{year}</span>
         <strong class="font-semibold text-steel-400">{site.company_name}</strong>. All Rights
         Reserved
-      </p>
-      <p>
-        Designed by{' '}
-        <a
-          href={site.footer.credit_url}
-          target="_blank"
-          rel="noopener noreferrer"
-          class="text-steel-400 underline decoration-steel-700 underline-offset-2 hover:text-accent-400"
-        >
-          Accuarte Management
-        </a>
       </p>
     </div>
   </div>
 </footer>
+
+<script>
+  // The year is written at build time; refresh it in the browser so a static
+  // build never shows a stale year.
+  document.querySelectorAll('[data-copyright-year]').forEach((el) => {
+    el.textContent = String(new Date().getFullYear());
+  });
+</script>

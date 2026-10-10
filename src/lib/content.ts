@@ -185,7 +185,9 @@ export function plainNoLinks(text: string): string {
 
 /* ------------------------------------------------------------- contact bits */
 
-export const tel = `tel:+91${site.contact.phone}`;
+/** Phone as shown to people, and as a dialable link — both from site.json. */
+export const phoneDisplay = site.contact.phone.display;
+export const tel = `tel:${site.contact.phone.e164}`;
 export const whatsappHref = site.contact.whatsapp.href_in_source;
 export const mapsLink =
   'https://www.google.com/maps/search/?api=1&query=Alert+Engineering+Works+GIDC+Vapi+Gujarat+India';

@@ -1,7 +1,7 @@
 ---
 import PageLayout from '../layouts/PageLayout.astro';
 import Icon from '../components/Icon.astro';
-import { site, tel, emails, mapsLink, headings } from '../lib/content';
+import { site, tel, phoneDisplay, emails, mapsLink, headings } from '../lib/content';
 
 const SLUG = 'contact';
 // "Location:", "Email:", "Phone:" — the captured labels, in captured order.
@@ -12,7 +12,7 @@ const map = site.google_maps_embed;
 const iframeId = `JotFormIFrame-${form.form_id}`;
 
 // Unique description from this page's own words: its three labelled rows.
-const description = `${locationLabel} ${site.contact.address.full_contact_page} ${emailLabel} ${emails.join(', ')}. ${phoneLabel} ${site.contact.phone}`;
+const description = `${locationLabel} ${site.contact.address.full_contact_page} ${emailLabel} ${emails.join(', ')}. ${phoneLabel} ${phoneDisplay}`;
 ---
 
 <PageLayout slug={SLUG} description={description} cta={false}>
@@ -52,7 +52,7 @@ const description = `${locationLabel} ${site.contact.address.full_contact_page} 
           <div>
             <h2 class="card-title">{phoneLabel}</h2>
             <a href={tel} class="mt-1 block text-lg font-semibold text-steel-900 hover:text-accent-700">
-              {site.contact.phone}
+              {phoneDisplay}
             </a>
           </div>
         </li>
